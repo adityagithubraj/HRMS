@@ -155,11 +155,11 @@ The application has a simple desktop-style layout:
 ## Deployment
 
 Backend:
-- Deploy on Render, Railway, Azure, or similar platforms.
+- Deploy on Render.
 - Set `MONGODB_URI` and `MONGODB_DB_NAME` environment variables.
 
 Frontend:
-- Deploy on Netlify, Vercel, or similar platforms.
+- Deploy on Netlify.
 - Run `npm run build`
 - Update `VITE_API_BASE_URL` to your live backend URL.
 
@@ -171,5 +171,4 @@ Make sure CORS is properly configured on the backend.
 
 - No authentication or user roles  
 - Single admin usage  
-- No pagination  
 - No advanced HR features like payroll or leave management  
