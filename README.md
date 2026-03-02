@@ -2,136 +2,174 @@
 
 ## Overview
 
-HRMS Lite is a lightweight Human Resource Management System designed as a simple internal HR tool for:
+HRMS Lite is a simple Human Resource Management System built as a lightweight internal HR tool. It allows basic employee management and attendance tracking through a clean admin interface.
 
-- **Employee management**: Add, list, and delete employees.
-- **Attendance tracking**: Mark daily attendance and view records.
-- **Basic summaries**: View total present/absent days per employee.
+This project focuses on clean architecture and a production-ready structure using modern technologies.
 
-The focus is on a clean, production-ready architecture and a desktop-style admin UI.
+---
+
+## Features
+
+- Add, list, and delete employees  
+- Mark daily attendance (Present or Absent)  
+- View attendance records  
+- View total present and absent days per employee  
+
+This system is designed for a single admin user and does not include authentication.
+
+---
 
 ## Tech Stack
 
-- **Frontend**: React + TypeScript (Vite)
-- **Backend**: FastAPI (Python)
-- **Database**: MongoDB Atlas (or any MongoDB instance)
+Frontend:
+- React
+- TypeScript
+- Vite
+
+Backend:
+- FastAPI (Python)
+
+Database:
+- MongoDB (Atlas or local instance)
+
+---
 
 ## Project Structure
 
-- `backend/`
-  - `app/main.py`: FastAPI application entrypoint and router registration.
-  - `app/config.py`: Configuration and environment loading.
-  - `app/database.py`: MongoDB connection and dependency.
-  - `app/routers_employees.py`: Employee management APIs.
-  - `app/routers_attendance.py`: Attendance management APIs and summary.
-  - `app/schemas.py`: Pydantic models and API schemas.
-  - `requirements.txt`: Python dependencies.
-- `frontend/`
-  - Vite React application with a single-page admin console UI.
+```
+backend/
+  app/
+    main.py
+    config.py
+    database.py
+    routers_employees.py
+    routers_attendance.py
+    schemas.py
+  requirements.txt
 
-## Backend: Running Locally
+frontend/
+  (Vite React + TypeScript app)
+```
 
-### 1. Create and configure environment
+---
 
-In `backend/`, create a `.env` file:
+## Running the Backend
 
-```bash
-MONGODB_URI="YOUR_MONGODB_ATLAS_CONNECTION_STRING"
+### 1. Create Environment File
+
+Inside the `backend/` folder, create a `.env` file:
+
+```
+MONGODB_URI="YOUR_MONGODB_CONNECTION_STRING"
 MONGODB_DB_NAME="hrms_lite"
 ```
 
-You can also point `MONGODB_URI` to a local MongoDB instance if preferred.
+### 2. Install Dependencies
 
-### 2. Install dependencies
-
-From the `backend/` directory:
-
-```bash
+```
 pip install -r requirements.txt
 ```
 
-### 3. Run the API server
+### 3. Run the Server
 
-```bash
+```
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-The API will be available at:
+Backend will run at:
 
-- Base URL: `http://localhost:8000/`
-- API root: `http://localhost:8000/api`
-- Swagger docs: `http://localhost:8000/docs`
+- http://localhost:8000/
+- http://localhost:8000/api
+- http://localhost:8000/docs
 
-### Core API Endpoints
+---
 
-- **Employees**
-  - `POST /api/employees` – Create employee (unique `employee_id` and email, validations).
-  - `GET /api/employees` – List all employees.
-  - `DELETE /api/employees/{employee_id}` – Delete an employee.
+## API Endpoints
 
-- **Attendance**
-  - `POST /api/attendance` – Mark attendance for an employee (date + Present/Absent, one per day).
-  - `GET /api/attendance` – List attendance records (optional filters: `employee_id`, `date`).
-  - `GET /api/attendance/employee/{employee_id}` – Attendance for a specific employee.
-  - `GET /api/attendance/summary` – Summary per employee (total present/absent).
+### Employees
 
-All endpoints return meaningful error messages and appropriate HTTP status codes (e.g. 404, 409, 422).
+- `POST /api/employees` – Create employee  
+- `GET /api/employees` – List employees  
+- `DELETE /api/employees/{employee_id}` – Delete employee  
 
-## Frontend: Running Locally
+### Attendance
 
-### 1. Configure API base URL
+- `POST /api/attendance` – Mark attendance  
+- `GET /api/attendance` – List attendance records  
+- `GET /api/attendance/employee/{employee_id}` – Employee attendance  
+- `GET /api/attendance/summary` – Attendance summary  
 
-In `frontend/`, create a `.env` file:
+All endpoints return proper HTTP status codes like 404, 409, and 422 when required.
 
-```bash
+---
+
+## Running the Frontend
+
+### 1. Create Environment File
+
+Inside the `frontend/` folder, create a `.env` file:
+
+```
 VITE_API_BASE_URL="http://localhost:8000/api"
 ```
 
-### 2. Install dependencies
+### 2. Install Dependencies
 
-From the `frontend/` directory:
-
-```bash
+```
 npm install
 ```
 
-### 3. Run the development server
+### 3. Start Development Server
 
-```bash
+```
 npm run dev
 ```
 
-The application will be available at the URL printed by Vite (typically `http://localhost:5173`).
+The app will run on the URL shown in the terminal (usually http://localhost:5173).
 
-## UI Overview
+---
 
-- **Desktop-like layout** with:
-  - Left sidebar navigation (`Employees`, `Attendance`).
-  - Top bar showing current module and basic counters.
-  - Main content area showing tables and forms.
-- **Employee Management**:
-  - Table of employees with delete action.
-  - Form to add new employees.
-  - Loading, empty, and error states.
-- **Attendance Management**:
-  - Form to mark attendance for an employee.
-  - Table of recent records.
-  - Summary table with total present/absent per employee.
+## UI Description
 
-## Deployment Notes
+The application has a simple desktop-style layout:
 
-You can deploy the application using any modern platform:
+- Left sidebar for navigation (Employees and Attendance)
+- Top bar showing the current section
+- Main area with forms and tables
 
-- **Backend**: Render, Railway, Azure App Service, etc. (Expose FastAPI on a public URL and set `MONGODB_URI` and `MONGODB_DB_NAME` environment variables.)
-- **Frontend**: Netlify, Vercel, GitHub Pages, etc. (Build with `npm run build` and point `VITE_API_BASE_URL` to the deployed backend URL.)
+### Employees Section
 
-Ensure that:
+- Add employee form  
+- Table listing employees  
+- Delete option  
+- Loading and error states  
 
-- The backend CORS settings allow your frontend origin.
-- The frontend `.env` uses the live backend URL.
+### Attendance Section
 
-## Assumptions & Limitations
+- Mark attendance form  
+- Recent attendance records table  
+- Summary table with total present and absent days  
 
-- Single admin user; no authentication or authorization.
-- No advanced HR features (leave, payroll, roles, etc.).
-- No pagination or advanced filtering beyond simple query parameters.
+---
+
+## Deployment
+
+Backend:
+- Deploy on Render, Railway, Azure, or similar platforms.
+- Set `MONGODB_URI` and `MONGODB_DB_NAME` environment variables.
+
+Frontend:
+- Deploy on Netlify, Vercel, or similar platforms.
+- Run `npm run build`
+- Update `VITE_API_BASE_URL` to your live backend URL.
+
+Make sure CORS is properly configured on the backend.
+
+---
+
+## Limitations
+
+- No authentication or user roles  
+- Single admin usage  
+- No pagination  
+- No advanced HR features like payroll or leave management  
